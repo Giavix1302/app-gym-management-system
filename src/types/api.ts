@@ -189,3 +189,40 @@ export interface MarkAllAsReadResponse {
   message: string;
   modifiedCount: number;
 }
+
+// ==================== Schedule Event Types ====================
+export type EventType = 'booking' | 'classSession';
+export type ViewType = 'day' | 'week' | 'month';
+
+export interface ScheduleEvent {
+  _id: string;
+  title: string;
+  startTime: string; // ISO 8601 UTC
+  endTime: string;
+  locationName: string;
+  locationId: string;
+  roomName?: string;
+  roomId?: string;
+  trainerName: string | string[];
+  trainerId?: string;
+  trainerIds?: string[];
+  eventType: EventType;
+  status?: string;
+}
+
+export interface EventsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    events: ScheduleEvent[];
+    totalEvents: number;
+  };
+}
+
+export interface EventQueryParams {
+  viewType: ViewType;
+  date?: string;
+  week?: number;
+  year?: number;
+  month?: number;
+}

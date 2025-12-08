@@ -36,6 +36,9 @@ import VNPayWebViewScreen from '../screens/VNPayWebViewScreen';
 import PaymentSuccessScreen from '../screens/PaymentSuccessScreen';
 import PaymentFailedScreen from '../screens/PaymentFailedScreen';
 
+// User Screens
+import MyScheduleScreen from '../screens/MyScheduleScreen';
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
@@ -185,6 +188,13 @@ export default function AppNavigator() {
         <Stack.Screen
           name="PaymentFailed"
           component={PaymentFailedScreen}
+          options={{ headerShown: false }}
+        />
+
+        {/* User Screens */}
+        <Stack.Screen
+          name="MySchedule"
+          component={MyScheduleScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -56,9 +56,11 @@ export const membershipService = {
    * @param subId - ID của subscription cần xóa
    * @returns DeleteSubscriptionResponse
    */
-  deleteSubscription: async (subId: string): Promise<DeleteSubscriptionResponse> => {
+  deleteSubscription: async (subId: string | undefined): Promise<DeleteSubscriptionResponse> => {
     console.log('🚀 ~ deleteSubscriptionAPI ~ subId:', subId);
-    const response = await axiosInstance.delete<DeleteSubscriptionResponse>(`/subscriptions/${subId}`);
+    const response = await axiosInstance.delete<DeleteSubscriptionResponse>(
+      `/subscriptions/${subId}`
+    );
     console.log('🚀 ~ deleteSubscriptionAPI ~ rep:', response);
     return response.data;
   },

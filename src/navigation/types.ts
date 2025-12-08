@@ -29,6 +29,7 @@ export type RootStackParamList = {
   LocationsTest: undefined;
   Profile: undefined;
   Settings: undefined;
+  MySchedule: undefined;
   // Profile related screens
   PersonalInfo: undefined;
   FitnessProgress: undefined;
