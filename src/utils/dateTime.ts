@@ -29,8 +29,9 @@ const VIETNAM_OFFSET_HOURS = 7;
  * @returns Date object in Vietnam timezone
  */
 export const convertUTCToVietnam = (utcDateString: string): Date => {
-  const utcDate = parseISO(utcDateString);
-  return addHours(utcDate, VIETNAM_OFFSET_HOURS);
+  // const utcDate = parseISO(utcDateString);
+  // return addHours(utcDate, VIETNAM_OFFSET_HOURS);
+  return new Date(utcDateString);
 };
 
 /**

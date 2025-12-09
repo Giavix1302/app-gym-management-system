@@ -40,7 +40,7 @@ export default function PaymentSuccessScreen() {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching subscription:', error);
-        showError('Không thể tải thông tin gói tập. Vui lòng thử lại sau.');
+        showError('Không thể tải thông tin . Vui lòng thử lại sau.');
         setLoading(false);
       }
     };
@@ -59,9 +59,9 @@ export default function PaymentSuccessScreen() {
   if (loading) {
     return (
       <SafeAreaView className="flex-1 bg-white">
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#16697A" />
-          <Text className="text-gray-600 mt-4">Đang xử lý thông tin gói tập...</Text>
+          <Text className="mt-4 text-gray-600">Đang xử lý thông tin...</Text>
         </View>
       </SafeAreaView>
     );
@@ -69,47 +69,42 @@ export default function PaymentSuccessScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <View className="flex-1 justify-center items-center px-6">
+      <View className="flex-1 items-center justify-center px-6">
         {/* Success Icon */}
-        <View className="w-32 h-32 rounded-full bg-green-100 justify-center items-center mb-6">
+        <View className="mb-6 h-32 w-32 items-center justify-center rounded-full bg-green-100">
           <Ionicons name="checkmark-circle" size={80} color="#10B981" />
         </View>
 
         {/* Success Message */}
-        <Text className="text-3xl font-bold text-gray-800 mb-3 text-center">
+        <Text className="mb-3 text-center text-3xl font-bold text-gray-800">
           Thanh toán thành công!
         </Text>
 
-        <Text className="text-base text-gray-600 text-center mb-8 leading-6">
-          Gói tập của bạn đã được kích hoạt thành công.{'\n'}
+        <Text className="mb-8 text-center text-base leading-6 text-gray-600">
+          Dịch vụ của bạn đã được kích hoạt thành công.{'\n'}
           Bạn có thể bắt đầu sử dụng ngay bây giờ.
         </Text>
 
         {/* Success Details */}
-        <View className="bg-green-50 rounded-2xl p-4 mb-8 w-full border border-green-200">
-          <View className="flex-row items-center mb-2">
+        <View className="mb-8 w-full rounded-2xl border border-green-200 bg-green-50 p-4">
+          <View className="mb-2 flex-row items-center">
             <Ionicons name="information-circle" size={20} color="#10B981" />
-            <Text className="text-sm font-semibold text-green-800 ml-2">
-              Thông tin giao dịch
-            </Text>
+            <Text className="ml-2 text-sm font-semibold text-green-800">Thông tin giao dịch</Text>
           </View>
-          <Text className="text-sm text-green-700 leading-5">
-            Giao dịch đã được xử lý thành công. Vui lòng kiểm tra gói tập của bạn trong mục "Gói tập của tôi".
+          <Text className="text-sm leading-5 text-green-700">
+            Giao dịch đã được xử lý thành công. Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!
           </Text>
         </View>
 
         {/* Action Buttons */}
         <View className="w-full space-y-3">
           <TouchableOpacity
-            className="bg-primary py-4 rounded-xl items-center"
+            className="items-center rounded-xl bg-primary py-4"
             onPress={handleBackToMembership}
-            activeOpacity={0.8}
-          >
+            activeOpacity={0.8}>
             <View className="flex-row items-center">
               <Ionicons name="fitness" size={20} color="#FFFFFF" />
-              <Text className="text-white text-base font-bold ml-2">
-                Xem gói tập của tôi
-              </Text>
+              <Text className="ml-2 text-base font-bold text-white">Quay về trang chủ</Text>
             </View>
           </TouchableOpacity>
         </View>

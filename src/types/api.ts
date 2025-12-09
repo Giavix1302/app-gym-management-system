@@ -46,6 +46,7 @@ export interface User {
   gender: string;
   address: string;
   avatar: string;
+  qrCode?: string;
   myMembership?: Membership;
   createdAt: string;
   updatedAt: string;

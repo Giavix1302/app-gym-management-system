@@ -34,6 +34,16 @@ export interface UpdateUserResponse {
   user: UserDetail;
 }
 
+export interface ChangePasswordPayload {
+  oldPassword: string;
+  newPlainPassword: string;
+}
+
+export interface ChangePasswordResponse {
+  success: boolean;
+  message: string;
+}
+
 // ==================== User Service ====================
 export const userService = {
   /**
@@ -101,9 +111,33 @@ export const userService = {
 
     return response.data;
   },
+
+  /**
+   * Change user password
+   * @param userId - User ID
+   * @param oldPassword - Current password
+   * @param newPlainPassword - New password
+   * @returns Success response
+   */
+  changePassword: async (
+    userId: string,
+    oldPassword: string,
+    newPlainPassword: string
+  ): Promise<ChangePasswordResponse> => {
+    console.log('🚀 ~ changePasswordAPI ~ userId:', userId);
+    const response = await axiosInstance.put<ChangePasswordResponse>(
+      `/users/${userId}/change-password`,
+      {
+        oldPassword,
+        newPlainPassword,
+      }
+    );
+    return response.data;
+  },
 };
 
 // ==================== Export Individual APIs (for backward compatibility) ====================
 export const getUserDetailAPI = userService.getUserDetail;
 export const updateInfoUserAPI = userService.updateUserInfo;
 export const updateAvatarAPI = userService.updateAvatar;
+export const changePasswordAPI = userService.changePassword;

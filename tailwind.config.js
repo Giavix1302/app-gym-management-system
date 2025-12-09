@@ -11,7 +11,7 @@ module.exports = {
         warning: '#F59E0B',
         success: '#10B981',
         info: '#3B82F6',
-        backgroundDefault: '#EDE7E3',
+        backgroundDefault: '#F9FAFB',
         backgroundPaper: '#FFFFFF',
         textPrimary: '#212121',
         textSecondary: '#555555',

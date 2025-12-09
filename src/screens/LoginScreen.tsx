@@ -62,7 +62,32 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
       }
     } catch (error: any) {
       console.error('Login error:', error);
-      // Error already handled by axios interceptor
+
+      // Xử lý hiển thị lỗi cho người dùng
+      if (error.response) {
+        const status = error.response.status;
+        const errorMessage = error.response.data?.message;
+
+        switch (status) {
+          case 401:
+            notification.error(errorMessage || 'Số điện thoại hoặc mật khẩu không đúng');
+            break;
+          case 400:
+            notification.error(errorMessage || 'Thông tin đăng nhập không hợp lệ');
+            break;
+          case 500:
+            notification.error('Lỗi server, vui lòng thử lại sau');
+            break;
+          default:
+            notification.error(errorMessage || 'Đăng nhập thất bại, vui lòng thử lại');
+        }
+      } else if (error.request) {
+        // Lỗi network (không nhận được response từ server)
+        notification.error('Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng');
+      } else {
+        // Lỗi khác
+        notification.error(error.message || 'Đã xảy ra lỗi, vui lòng thử lại');
+      }
     } finally {
       setLoading(false);
     }

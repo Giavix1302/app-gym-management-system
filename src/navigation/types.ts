@@ -33,6 +33,10 @@ export type RootStackParamList = {
   // Profile related screens
   PersonalInfo: undefined;
   FitnessProgress: undefined;
+  AddEditProgress: {
+    progressId?: string; // undefined = create mode, string = edit mode
+    progressData?: any;
+  };
   CheckInOutHistory: undefined;
   PaymentHistory: undefined;
   Revenue: undefined;
@@ -51,5 +55,18 @@ export type RootStackParamList = {
   PaymentSuccess: undefined;
   PaymentFailed: {
     errorMessage?: string;
+  };
+  // Booking PT screens
+  TrainerDetail: {
+    trainerId: string;
+    selectedDate: string; // ISO date string
+  };
+  BookingDetail: {
+    trainerId: string;
+    bookingType: 'upcoming' | 'history';
+  };
+  // Class enrollment screens
+  ClassDetail: {
+    classId: string;
   };
 };

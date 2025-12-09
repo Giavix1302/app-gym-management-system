@@ -12,6 +12,8 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
 import { useNotification } from '../context/NotificationContext';
 import PrimaryButton from '../components/PrimaryButton';
+import OTPVerificationModal from '../components/modals/OTPVerificationModal';
+import { authService } from '../services/authService';
 
 type SignupScreenNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -22,13 +24,16 @@ interface SignupScreenProps {
   navigation: SignupScreenNavigationProp;
 }
 
+type UserRole = 'user' | 'pt';
+
 export default function SignupScreen({ navigation }: SignupScreenProps) {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState<UserRole>('user');
   const [loading, setLoading] = useState(false);
+  const [showOtpModal, setShowOtpModal] = useState(false);
   const notification = useNotification();
 
   const handleSignup = async () => {
@@ -43,18 +48,8 @@ export default function SignupScreen({ navigation }: SignupScreenProps) {
       return;
     }
 
-    if (!email.trim()) {
-      notification.warning('Vui lòng nhập email');
-      return;
-    }
-
     if (!password.trim()) {
       notification.warning('Vui lòng nhập mật khẩu');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      notification.warning('Mật khẩu xác nhận không khớp');
       return;
     }
 
@@ -63,32 +58,129 @@ export default function SignupScreen({ navigation }: SignupScreenProps) {
       return;
     }
 
+    if (password !== confirmPassword) {
+      notification.warning('Mật khẩu xác nhận không khớp');
+      return;
+    }
+
     try {
       setLoading(true);
 
-      // TODO: Implement signup API call
-      // const response = await axiosPublic.post('/auth/register', {
-      //   fullName,
-      //   phone,
-      //   email,
-      //   password,
-      // });
+      // Call signup API
+      const response = await authService.signup(phone, password, fullName, role);
 
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      notification.success('Đăng ký thành công! Vui lòng đăng nhập');
-
-      // Navigate to login after 2 seconds
-      setTimeout(() => {
-        navigation.navigate('Login');
-      }, 2000);
+      if (response.success) {
+        notification.success(response.message || 'Mã OTP đã được gửi đến số điện thoại của bạn');
+        setShowOtpModal(true);
+      }
     } catch (error: any) {
       console.error('Signup error:', error);
-      notification.error('Có lỗi xảy ra, vui lòng thử lại');
+
+      // Handle error messages
+      if (error.response) {
+        const status = error.response.status;
+        const errorMessage = error.response.data?.message;
+
+        switch (status) {
+          case 400:
+            notification.error(errorMessage || 'Thông tin đăng ký không hợp lệ');
+            break;
+          case 409:
+            notification.error(errorMessage || 'Số điện thoại đã được đăng ký');
+            break;
+          case 500:
+            notification.error('Lỗi server, vui lòng thử lại sau');
+            break;
+          default:
+            notification.error(errorMessage || 'Đăng ký thất bại, vui lòng thử lại');
+        }
+      } else if (error.request) {
+        notification.error('Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng');
+      } else {
+        notification.error(error.message || 'Đã xảy ra lỗi, vui lòng thử lại');
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleVerifyOtp = async (code: string) => {
+    try {
+      const response = await authService.verifyOtp(phone, code);
+
+      if (response.success) {
+        notification.success(response.message || 'Đăng ký thành công!');
+        setShowOtpModal(false);
+
+        // Auto login and navigate based on role
+        setTimeout(() => {
+          if (response.user.role === 'pt') {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'PTTabs' }],
+            });
+          } else {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'UserTabs' }],
+            });
+          }
+        }, 500);
+      }
+    } catch (error: any) {
+      console.error('OTP verification error:', error);
+
+      if (error.response) {
+        const status = error.response.status;
+        const errorMessage = error.response.data?.message;
+
+        switch (status) {
+          case 400:
+            notification.error(errorMessage || 'Mã OTP không hợp lệ');
+            break;
+          case 401:
+            notification.error(errorMessage || 'Mã OTP không đúng hoặc đã hết hạn');
+            break;
+          case 500:
+            notification.error('Lỗi server, vui lòng thử lại sau');
+            break;
+          default:
+            notification.error(errorMessage || 'Xác thực thất bại, vui lòng thử lại');
+        }
+      } else if (error.request) {
+        notification.error('Không thể kết nối đến server');
+      } else {
+        notification.error(error.message || 'Đã xảy ra lỗi');
+      }
+
+      throw error; // Re-throw to prevent modal from closing
+    }
+  };
+
+  const handleResendOtp = async () => {
+    try {
+      // Resend OTP by calling signup API again
+      const response = await authService.signup(phone, password, fullName, role);
+
+      if (response.success) {
+        notification.success('Mã OTP mới đã được gửi');
+      }
+    } catch (error: any) {
+      console.error('Resend OTP error:', error);
+
+      if (error.response) {
+        const errorMessage = error.response.data?.message;
+        notification.error(errorMessage || 'Gửi lại mã OTP thất bại');
+      } else {
+        notification.error('Không thể gửi lại mã OTP');
+      }
+
+      throw error;
+    }
+  };
+
+  const handleCloseOtpModal = () => {
+    setShowOtpModal(false);
   };
 
   const handleBackToLogin = () => {
@@ -118,7 +210,7 @@ export default function SignupScreen({ navigation }: SignupScreenProps) {
             {/* Full Name Input */}
             <View className="mb-4">
               <Text className="text-sm font-semibold text-textPrimary mb-2">
-                Họ và tên
+                Họ và tên <Text className="text-error">*</Text>
               </Text>
               <TextInput
                 className="bg-white border border-gray-300 rounded-lg px-4 py-3 text-base text-textPrimary"
@@ -133,7 +225,7 @@ export default function SignupScreen({ navigation }: SignupScreenProps) {
             {/* Phone Input */}
             <View className="mb-4">
               <Text className="text-sm font-semibold text-textPrimary mb-2">
-                Số điện thoại
+                Số điện thoại <Text className="text-error">*</Text>
               </Text>
               <TextInput
                 className="bg-white border border-gray-300 rounded-lg px-4 py-3 text-base text-textPrimary"
@@ -146,31 +238,58 @@ export default function SignupScreen({ navigation }: SignupScreenProps) {
               />
             </View>
 
-            {/* Email Input */}
+            {/* Role Picker */}
             <View className="mb-4">
               <Text className="text-sm font-semibold text-textPrimary mb-2">
-                Email
+                Loại tài khoản <Text className="text-error">*</Text>
               </Text>
-              <TextInput
-                className="bg-white border border-gray-300 rounded-lg px-4 py-3 text-base text-textPrimary"
-                placeholder="Nhập email"
-                placeholderTextColor="#9CA3AF"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                editable={!loading}
-              />
+              <View className="flex-row gap-3">
+                <TouchableOpacity
+                  className={`flex-1 py-3 rounded-lg border-2 ${
+                    role === 'user'
+                      ? 'bg-primary border-primary'
+                      : 'bg-white border-gray-300'
+                  }`}
+                  onPress={() => setRole('user')}
+                  disabled={loading}
+                >
+                  <Text
+                    className={`text-center font-semibold ${
+                      role === 'user' ? 'text-white' : 'text-textSecondary'
+                    }`}
+                  >
+                    Thành viên
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  className={`flex-1 py-3 rounded-lg border-2 ${
+                    role === 'pt'
+                      ? 'bg-primary border-primary'
+                      : 'bg-white border-gray-300'
+                  }`}
+                  onPress={() => setRole('pt')}
+                  disabled={loading}
+                >
+                  <Text
+                    className={`text-center font-semibold ${
+                      role === 'pt' ? 'text-white' : 'text-textSecondary'
+                    }`}
+                  >
+                    Huấn luyện viên
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
 
             {/* Password Input */}
             <View className="mb-4">
               <Text className="text-sm font-semibold text-textPrimary mb-2">
-                Mật khẩu
+                Mật khẩu <Text className="text-error">*</Text>
               </Text>
               <TextInput
                 className="bg-white border border-gray-300 rounded-lg px-4 py-3 text-base text-textPrimary"
-                placeholder="Nhập mật khẩu"
+                placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)"
                 placeholderTextColor="#9CA3AF"
                 value={password}
                 onChangeText={setPassword}
@@ -182,7 +301,7 @@ export default function SignupScreen({ navigation }: SignupScreenProps) {
             {/* Confirm Password Input */}
             <View className="mb-6">
               <Text className="text-sm font-semibold text-textPrimary mb-2">
-                Xác nhận mật khẩu
+                Xác nhận mật khẩu <Text className="text-error">*</Text>
               </Text>
               <TextInput
                 className="bg-white border border-gray-300 rounded-lg px-4 py-3 text-base text-textPrimary"
@@ -197,7 +316,7 @@ export default function SignupScreen({ navigation }: SignupScreenProps) {
 
             {/* Signup Button */}
             <PrimaryButton
-              title={loading ? 'Đang đăng ký...' : 'Đăng ký'}
+              title={loading ? 'Đang xử lý...' : 'Đăng ký'}
               onPress={handleSignup}
               disabled={loading}
             />
@@ -216,6 +335,17 @@ export default function SignupScreen({ navigation }: SignupScreenProps) {
           </View>
         </View>
       </ScrollView>
+
+      {/* OTP Verification Modal */}
+      <OTPVerificationModal
+        visible={showOtpModal}
+        phone={phone}
+        onVerify={handleVerifyOtp}
+        onResend={handleResendOtp}
+        onClose={handleCloseOtpModal}
+        title="Xác thực tài khoản"
+        description="Vui lòng nhập mã OTP đã được gửi đến số điện thoại"
+      />
     </KeyboardAvoidingView>
   );
 }

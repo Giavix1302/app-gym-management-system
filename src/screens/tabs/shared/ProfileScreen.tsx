@@ -43,27 +43,23 @@ export default function ProfileScreen() {
   );
 
   const handleLogout = () => {
-    Alert.alert(
-      'Đăng xuất',
-      'Bạn có chắc chắn muốn đăng xuất?',
-      [
-        {
-          text: 'Hủy',
-          style: 'cancel',
+    Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất?', [
+      {
+        text: 'Hủy',
+        style: 'cancel',
+      },
+      {
+        text: 'Đăng xuất',
+        style: 'destructive',
+        onPress: async () => {
+          await authService.logout();
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Login' }],
+          });
         },
-        {
-          text: 'Đăng xuất',
-          style: 'destructive',
-          onPress: async () => {
-            await authService.logout();
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Login' }],
-            });
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   const avatarSource = getAvatarSource(user?.avatar);
@@ -73,32 +69,30 @@ export default function ProfileScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={true}>
         {/* Avatar & Name Section */}
-        <View className="items-center py-8 bg-white mb-4">
+        <View className="mb-4 items-center bg-white py-8">
           {avatarSource ? (
             <Image
               source={avatarSource}
-              className="w-[100px] h-[100px] rounded-full mb-4 border-[3px] border-primary"
+              className="mb-4 h-[100px] w-[100px] rounded-full border-[3px] border-primary"
               resizeMode="cover"
             />
           ) : (
-            <View className="w-[100px] h-[100px] rounded-full bg-primary justify-center items-center mb-4 border-[3px] border-primary">
-              <Text className="text-white text-[40px] font-bold">
-                {userInitial}
-              </Text>
+            <View className="mb-4 h-[100px] w-[100px] items-center justify-center rounded-full border-[3px] border-primary bg-primary">
+              <Text className="text-[40px] font-bold text-white">{userInitial}</Text>
             </View>
           )}
-          <Text className="text-2xl font-bold text-gray-800 mb-1">
+          <Text className="mb-1 text-2xl font-bold text-gray-800">
             {user?.fullName || 'Người dùng'}
           </Text>
-          <Text className="text-base text-gray-600 font-medium">
+          <Text className="text-base font-medium text-gray-600">
             {isPT ? 'Huấn luyện viên' : 'Thành viên'}
           </Text>
         </View>
 
         {/* Menu Items */}
-        <View className="bg-white mb-4">
+        <View className="mb-4 bg-white">
           {/* Common menu items */}
           <ProfileMenuItem
             icon="person-outline"

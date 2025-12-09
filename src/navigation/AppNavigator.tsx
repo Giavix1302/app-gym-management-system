@@ -25,6 +25,7 @@ import ProfileScreen from '../screens/tabs/shared/ProfileScreen';
 // Profile Screens
 import PersonalInfoScreen from '../screens/profile/PersonalInfoScreen';
 import FitnessProgressScreen from '../screens/profile/FitnessProgressScreen';
+import AddEditProgressScreen from '../screens/profile/AddEditProgressScreen';
 import CheckInOutHistoryScreen from '../screens/profile/CheckInOutHistoryScreen';
 import PaymentHistoryScreen from '../screens/profile/PaymentHistoryScreen';
 import RevenueScreen from '../screens/profile/RevenueScreen';
@@ -38,6 +39,13 @@ import PaymentFailedScreen from '../screens/PaymentFailedScreen';
 
 // User Screens
 import MyScheduleScreen from '../screens/MyScheduleScreen';
+
+// Booking Screens
+import TrainerDetailScreen from '../screens/booking/TrainerDetailScreen';
+import BookingDetailScreen from '../screens/booking/BookingDetailScreen';
+
+// Class Screens
+import ClassDetailScreen from '../screens/class/ClassDetailScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -147,6 +155,11 @@ export default function AppNavigator() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="AddEditProgress"
+          component={AddEditProgressScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="CheckInOutHistory"
           component={CheckInOutHistoryScreen}
           options={{ headerShown: false }}
@@ -195,6 +208,25 @@ export default function AppNavigator() {
         <Stack.Screen
           name="MySchedule"
           component={MyScheduleScreen}
+          options={{ headerShown: false }}
+        />
+
+        {/* Booking PT Screens */}
+        <Stack.Screen
+          name="TrainerDetail"
+          component={TrainerDetailScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="BookingDetail"
+          component={BookingDetailScreen}
+          options={{ headerShown: false }}
+        />
+
+        {/* Class Enrollment Screens */}
+        <Stack.Screen
+          name="ClassDetail"
+          component={ClassDetailScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
