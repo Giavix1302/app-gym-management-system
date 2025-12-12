@@ -341,7 +341,7 @@ export default function BookingDetailScreen() {
                 </View>
 
                 {/* Review Display */}
-                {!isUpcoming && historySession.review && (
+                {!isUpcoming && historySession.review && status !== 'cancelled' && (
                   <View className="mb-3 rounded-xl border border-amber-200 bg-amber-50 p-3">
                     <View className="mb-1 flex-row items-center">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -367,7 +367,7 @@ export default function BookingDetailScreen() {
                   </TouchableOpacity>
                 )}
 
-                {canReview && (
+                {canReview && status !== 'cancelled' && (
                   <TouchableOpacity
                     className="items-center rounded-xl bg-primary py-3"
                     onPress={() => handleReviewPress(historySession)}

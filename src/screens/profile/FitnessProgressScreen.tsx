@@ -5,7 +5,6 @@ import {
   ScrollView,
   TouchableOpacity,
   ActivityIndicator,
-  Alert,
   Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,6 +20,7 @@ import { progressService, ProgressRecord } from '../../services/progressService'
 import { getUser } from '../../utils/storage';
 import { useNotification } from '../../context/NotificationContext';
 import { Colors } from '../../constants/colors';
+import ConfirmModal from '../../components/modals/ConfirmModal';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -32,6 +32,9 @@ export default function FitnessProgressScreen() {
   const [loading, setLoading] = useState(true);
   const [progressData, setProgressData] = useState<ProgressRecord[]>([]);
   const [userId, setUserId] = useState<string>('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedProgressId, setSelectedProgressId] = useState<string>('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   // Load user ID
   useEffect(() => {
@@ -80,23 +83,23 @@ export default function FitnessProgressScreen() {
       return;
     }
 
-    Alert.alert('Xác nhận xóa', 'Bạn có chắc chắn muốn xóa bản ghi này?', [
-      { text: 'Hủy', style: 'cancel' },
-      {
-        text: 'Xóa',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await progressService.deleteProgress(progressId);
-            notification.success('Đã xóa bản ghi thành công');
-            loadProgressData();
-          } catch (error: any) {
-            console.error('Error deleting progress:', error);
-            notification.error('Không thể xóa bản ghi');
-          }
-        },
-      },
-    ]);
+    setSelectedProgressId(progressId);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      setDeleteLoading(true);
+      await progressService.deleteProgress(selectedProgressId);
+      setShowDeleteModal(false);
+      setDeleteLoading(false);
+      notification.success('Đã xóa bản ghi thành công');
+      loadProgressData();
+    } catch (error: any) {
+      console.error('Error deleting progress:', error);
+      notification.error('Không thể xóa bản ghi');
+      setDeleteLoading(false);
+    }
   };
 
   const handleEdit = (record: ProgressRecord) => {
@@ -204,7 +207,12 @@ export default function FitnessProgressScreen() {
           <View className="flex-1">
             <Text className="text-sm font-semibold text-gray-800">
               {format(new Date(record.measurementDate), 'dd/MM/yyyy', { locale: vi })}
-              {isLatest && <Text className="text-xs" style={{ color: Colors.primary }}> (Mới nhất)</Text>}
+              {isLatest && (
+                <Text className="text-xs" style={{ color: Colors.primary }}>
+                  {' '}
+                  (Mới nhất)
+                </Text>
+              )}
             </Text>
             <View className="mt-2 flex-row space-x-4">
               <Text className="text-xs text-gray-600">
@@ -365,7 +373,10 @@ export default function FitnessProgressScreen() {
                 </ScrollView>
                 <View className="mt-2 flex-row items-center justify-center space-x-4">
                   <View className="flex-row items-center">
-                    <View className="mr-1 h-3 w-3 rounded-full" style={{ backgroundColor: Colors.primary }} />
+                    <View
+                      className="mr-1 h-3 w-3 rounded-full"
+                      style={{ backgroundColor: Colors.primary }}
+                    />
                     <Text className="text-xs text-gray-600">Cân nặng</Text>
                   </View>
                   <View className="flex-row items-center">
@@ -388,6 +399,19 @@ export default function FitnessProgressScreen() {
           </>
         )}
       </ScrollView>
+
+      {/* Confirm Delete Modal */}
+      <ConfirmModal
+        visible={showDeleteModal}
+        title="Xác nhận xóa"
+        message="Bạn có chắc chắn muốn xóa bản ghi này?"
+        confirmText="Xóa"
+        cancelText="Hủy"
+        confirmStyle="danger"
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setShowDeleteModal(false)}
+        loading={deleteLoading}
+      />
     </SafeAreaView>
   );
 }

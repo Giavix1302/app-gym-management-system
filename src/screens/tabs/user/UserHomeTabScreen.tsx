@@ -154,7 +154,7 @@ export default function UserHomeTabScreen() {
             {/* Gói tập Button */}
             <TouchableOpacity
               onPress={() => navigation.navigate('MembershipTab')}
-              className="flex-1 rounded-2xl bg-white p-5 shadow-sm"
+              className="flex-1 rounded-2xl bg-white p-4 shadow-sm"
               style={{
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
@@ -162,18 +162,18 @@ export default function UserHomeTabScreen() {
                 shadowRadius: 8,
                 elevation: 3,
               }}>
-              <View className="items-center">
-                <View className="mb-3 h-14 w-14 items-center justify-center rounded-2xl bg-blue-50">
-                  <Ionicons name="barbell" size={28} color="#16697A" />
+              <View className="flex-row items-center">
+                <View className="mr-3 h-12 w-12 items-center justify-center rounded-xl bg-blue-50">
+                  <Ionicons name="barbell" size={24} color="#16697A" />
                 </View>
-                <Text className="text-center text-sm font-semibold text-gray-800">Gói tập</Text>
+                <Text className="flex-1 text-sm font-semibold text-gray-800">Gói tập</Text>
               </View>
             </TouchableOpacity>
 
             {/* Đặt PT Button */}
             <TouchableOpacity
               onPress={() => navigation.navigate('BookPTTab')}
-              className="flex-1 rounded-2xl bg-white p-5 shadow-sm"
+              className="flex-1 rounded-2xl bg-white p-4 shadow-sm"
               style={{
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
@@ -181,11 +181,11 @@ export default function UserHomeTabScreen() {
                 shadowRadius: 8,
                 elevation: 3,
               }}>
-              <View className="items-center">
-                <View className="mb-3 h-14 w-14 items-center justify-center rounded-2xl bg-green-50">
-                  <Ionicons name="calendar" size={28} color="#10b981" />
+              <View className="flex-row items-center">
+                <View className="mr-3 h-12 w-12 items-center justify-center rounded-xl bg-green-50">
+                  <Ionicons name="calendar" size={24} color="#10b981" />
                 </View>
-                <Text className="text-center text-sm font-semibold text-gray-800">Đặt PT</Text>
+                <Text className="flex-1 text-sm font-semibold text-gray-800">Đặt PT</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -195,7 +195,7 @@ export default function UserHomeTabScreen() {
             {/* Lớp học Button */}
             <TouchableOpacity
               onPress={() => navigation.navigate('UserClassesTab')}
-              className="flex-1 rounded-2xl bg-white p-5 shadow-sm"
+              className="flex-1 rounded-2xl bg-white p-4 shadow-sm"
               style={{
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
@@ -203,18 +203,18 @@ export default function UserHomeTabScreen() {
                 shadowRadius: 8,
                 elevation: 3,
               }}>
-              <View className="items-center">
-                <View className="mb-3 h-14 w-14 items-center justify-center rounded-2xl bg-purple-50">
-                  <Ionicons name="school" size={28} color="#8b5cf6" />
+              <View className="flex-row items-center">
+                <View className="mr-3 h-12 w-12 items-center justify-center rounded-xl bg-purple-50">
+                  <Ionicons name="school" size={24} color="#8b5cf6" />
                 </View>
-                <Text className="text-center text-sm font-semibold text-gray-800">Lớp học</Text>
+                <Text className="flex-1 text-sm font-semibold text-gray-800">Lớp học</Text>
               </View>
             </TouchableOpacity>
 
             {/* Lịch của tôi Button */}
             <TouchableOpacity
               onPress={() => navigation.navigate('MySchedule')}
-              className="flex-1 rounded-2xl bg-white p-5 shadow-sm"
+              className="flex-1 rounded-2xl bg-white p-4 shadow-sm"
               style={{
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
@@ -222,13 +222,11 @@ export default function UserHomeTabScreen() {
                 shadowRadius: 8,
                 elevation: 3,
               }}>
-              <View className="items-center">
-                <View className="mb-3 h-14 w-14 items-center justify-center rounded-2xl bg-orange-50">
-                  <Ionicons name="time" size={28} color="#f97316" />
+              <View className="flex-row items-center">
+                <View className="mr-3 h-12 w-12 items-center justify-center rounded-xl bg-orange-50">
+                  <Ionicons name="time" size={24} color="#f97316" />
                 </View>
-                <Text className="text-center text-sm font-semibold text-gray-800">
-                  Lịch của tôi
-                </Text>
+                <Text className="flex-1 text-sm font-semibold text-gray-800">Lịch của tôi</Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -238,7 +236,7 @@ export default function UserHomeTabScreen() {
             {/* Mã QR của tôi Button */}
             <TouchableOpacity
               onPress={() => setShowQRModal(true)}
-              className="flex-1 rounded-2xl bg-white p-5 shadow-sm"
+              className="flex-1 rounded-2xl bg-white p-4 shadow-sm"
               style={{
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
@@ -246,20 +244,18 @@ export default function UserHomeTabScreen() {
                 shadowRadius: 8,
                 elevation: 3,
               }}>
-              <View className="items-center">
-                <View className="mb-3 h-14 w-14 items-center justify-center rounded-2xl bg-teal-50">
-                  <Ionicons name="qr-code-outline" size={28} color="#14b8a6" />
+              <View className="flex-row items-center">
+                <View className="mr-3 h-12 w-12 items-center justify-center rounded-xl bg-teal-50">
+                  <Ionicons name="qr-code-outline" size={24} color="#14b8a6" />
                 </View>
-                <Text className="text-center text-sm font-semibold text-gray-800">
-                  Mã QR của tôi
-                </Text>
+                <Text className="flex-1 text-sm font-semibold text-gray-800">Mã QR của tôi</Text>
               </View>
             </TouchableOpacity>
 
             {/* Tin nhắn Button */}
             <TouchableOpacity
               onPress={() => navigation.navigate('UserMessages')}
-              className="flex-1 rounded-2xl bg-white p-5 shadow-sm"
+              className="flex-1 rounded-2xl bg-white p-4 shadow-sm"
               style={{
                 shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
@@ -267,11 +263,11 @@ export default function UserHomeTabScreen() {
                 shadowRadius: 8,
                 elevation: 3,
               }}>
-              <View className="items-center">
-                <View className="mb-3 h-14 w-14 items-center justify-center rounded-2xl bg-pink-50">
-                  <Ionicons name="chatbubble-outline" size={28} color="#ec4899" />
+              <View className="flex-row items-center">
+                <View className="mr-3 h-12 w-12 items-center justify-center rounded-xl bg-pink-50">
+                  <Ionicons name="chatbubble-outline" size={24} color="#ec4899" />
                 </View>
-                <Text className="text-center text-sm font-semibold text-gray-800">Tin nhắn</Text>
+                <Text className="flex-1 text-sm font-semibold text-gray-800">Tin nhắn</Text>
               </View>
             </TouchableOpacity>
           </View>

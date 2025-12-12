@@ -178,7 +178,7 @@ export default function AddEditProgressScreen() {
         <TouchableOpacity
           onPress={handleSave}
           disabled={loading}
-          className={`rounded-lg px-4 py-2 ${loading ? 'bg-gray-300' : 'bg-blue-600'}`}>
+          className={`rounded-lg px-4 py-2 ${loading ? 'bg-gray-300' : 'bg-primary'}`}>
           {loading ? (
             <ActivityIndicator size="small" color="#FFFFFF" />
           ) : (
@@ -267,12 +267,12 @@ export default function AddEditProgressScreen() {
         </View>
 
         {/* Info Card */}
-        <View className="mb-20 mt-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
+        <View className="mb-20 mt-4 rounded-lg border border-primary/30 bg-primary/10 p-4">
           <View className="flex-row items-start">
-            <Ionicons name="information-circle" size={20} color="#3B82F6" />
+            <Ionicons name="information-circle" size={20} color="#16697A" />
             <View className="ml-3 flex-1">
-              <Text className="mb-1 font-semibold text-blue-800">Lưu ý</Text>
-              <Text className="text-sm text-blue-700">
+              <Text className="mb-1 font-semibold text-primary">Lưu ý</Text>
+              <Text className="text-sm text-gray-700">
                 • Đo lường vào cùng thời điểm trong ngày để có kết quả chính xác nhất
                 {'\n'}• Nên đo vào buổi sáng sau khi thức dậy và đi vệ sinh
                 {'\n'}• Cân nặng và khối lượng cơ tính bằng kg

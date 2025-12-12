@@ -74,7 +74,7 @@ export default function MembershipTabScreen() {
   if (loading) {
     return (
       <SafeAreaView className="flex-1 bg-gray-50">
-        <View className="flex-1 justify-center items-center">
+        <View className="flex-1 items-center justify-center">
           <ActivityIndicator size="large" color="#16697A" />
         </View>
       </SafeAreaView>
@@ -92,19 +92,14 @@ export default function MembershipTabScreen() {
             colors={['#16697A']}
             tintColor="#16697A"
           />
-        }
-      >
+        }>
         {/* My Membership Section - Highlighted */}
-        <View className="bg-gradient-to-b from-primary/5 to-transparent pt-6 pb-8">
-          <View className="flex-row items-center justify-between px-4 mb-4">
-            <Text className="text-2xl font-bold text-gray-800">
-              Gói tập của tôi
-            </Text>
+        <View className="bg-primary pb-8 pt-6">
+          <View className="mb-4 flex-row items-center justify-between px-4">
+            <Text className="text-2xl font-bold text-white">Gói tập của tôi</Text>
             {hasActiveMembership && (
-              <View className="bg-primary/10 px-3 py-1 rounded-full">
-                <Text className="text-primary text-xs font-semibold">
-                  Đang hoạt động
-                </Text>
+              <View className="rounded-full bg-white/20 px-3 py-1">
+                <Text className="text-xs font-semibold text-white">Đang hoạt động</Text>
               </View>
             )}
           </View>
@@ -112,22 +107,18 @@ export default function MembershipTabScreen() {
           {hasActiveMembership ? (
             <MyMembershipCard membership={myMembership} onPress={handleMyMembershipPress} />
           ) : (
-            <View className="bg-white rounded-2xl p-8 mx-4 shadow-sm border border-gray-100">
+            <View className="mx-4 rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
               <View className="items-center">
-                <View className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/10 to-primary/5 justify-center items-center mb-4">
+                <View className="mb-4 h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-primary/10 to-primary/5">
                   <Ionicons name="barbell-outline" size={48} color="#16697A" />
                 </View>
-                <Text className="text-xl font-bold text-gray-800 mb-2">
-                  Bạn chưa có gói tập
-                </Text>
-                <Text className="text-sm text-gray-600 text-center mb-4">
+                <Text className="mb-2 text-xl font-bold text-gray-800">Bạn chưa có gói tập</Text>
+                <Text className="mb-4 text-center text-sm text-gray-600">
                   Chọn gói tập phù hợp bên dưới để bắt đầu tập luyện
                 </Text>
                 <View className="flex-row items-center">
                   <Ionicons name="arrow-down" size={20} color="#16697A" />
-                  <Text className="text-primary text-sm font-medium ml-1">
-                    Xem các gói tập
-                  </Text>
+                  <Text className="ml-1 text-sm font-medium text-primary">Xem các gói tập</Text>
                 </View>
               </View>
             </View>
@@ -135,16 +126,12 @@ export default function MembershipTabScreen() {
         </View>
 
         {/* Available Packages Section */}
-        <View className="mt-2 mb-6">
-          <View className="flex-row items-center justify-between px-4 mb-4">
-            <Text className="text-2xl font-bold text-gray-800">
-              Các gói tập khả dụng
-            </Text>
-            <View className="flex-row items-center bg-primary/10 px-3 py-1 rounded-full">
+        <View className="mb-6 mt-8">
+          <View className="mb-4 flex-row items-center justify-between px-4">
+            <Text className="text-2xl font-bold text-gray-800">Các gói tập khả dụng</Text>
+            <View className="flex-row items-center rounded-full bg-primary/10 px-3 py-1">
               <Ionicons name="pricetag" size={14} color="#16697A" />
-              <Text className="text-primary text-xs font-semibold ml-1">
-                {packages.length} gói
-              </Text>
+              <Text className="ml-1 text-xs font-semibold text-primary">{packages.length} gói</Text>
             </View>
           </View>
 
@@ -157,12 +144,10 @@ export default function MembershipTabScreen() {
               />
             ))
           ) : (
-            <View className="bg-white rounded-2xl p-6 mx-4">
+            <View className="mx-4 rounded-2xl bg-white p-6">
               <View className="items-center">
                 <Ionicons name="file-tray-outline" size={48} color="#D1D5DB" />
-                <Text className="text-base text-gray-600 mt-3">
-                  Hiện chưa có gói tập nào
-                </Text>
+                <Text className="mt-3 text-base text-gray-600">Hiện chưa có gói tập nào</Text>
               </View>
             </View>
           )}

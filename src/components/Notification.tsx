@@ -1,4 +1,4 @@
-import { View, Text, Animated } from 'react-native';
+import { View, Text, Animated, Modal } from 'react-native';
 import { useEffect, useRef } from 'react';
 
 type NotificationType = 'success' | 'error' | 'warning' | 'info';
@@ -87,23 +87,37 @@ export default function Notification({
   const config = getNotificationConfig(type);
 
   return (
-    <Animated.View
-      style={{
-        transform: [{ translateY: slideAnim }],
-        opacity: opacityAnim,
-      }}
-      className="absolute top-12 left-4 right-4 z-50"
+    <Modal
+      visible={true}
+      transparent
+      animationType="none"
+      statusBarTranslucent
+      pointerEvents="box-none"
     >
-      <View
-        className={`${config.bgColor} rounded-lg shadow-lg border-l-4 ${config.borderColor} p-4 flex-row items-center`}
-      >
-        <View className="mr-3">
-          <Text className="text-white text-xl font-bold">{config.icon}</Text>
-        </View>
-        <View className="flex-1">
-          <Text className="text-white font-semibold text-base">{title}</Text>
-        </View>
+      <View style={{ flex: 1 }} pointerEvents="box-none">
+        <Animated.View
+          style={{
+            transform: [{ translateY: slideAnim }],
+            opacity: opacityAnim,
+            position: 'absolute',
+            top: 48,
+            left: 16,
+            right: 16,
+          }}
+          pointerEvents="auto"
+        >
+          <View
+            className={`${config.bgColor} rounded-lg shadow-lg border-l-4 ${config.borderColor} p-4 flex-row items-center`}
+          >
+            <View className="mr-3">
+              <Text className="text-white text-xl font-bold">{config.icon}</Text>
+            </View>
+            <View className="flex-1">
+              <Text className="text-white font-semibold text-base">{title}</Text>
+            </View>
+          </View>
+        </Animated.View>
       </View>
-    </Animated.View>
+    </Modal>
   );
 }

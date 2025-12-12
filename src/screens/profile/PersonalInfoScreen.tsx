@@ -234,6 +234,12 @@ export default function PersonalInfoScreen() {
       return;
     }
 
+    // Check if user tried to add new images
+    if (newPhysiqueImages.length > 0) {
+      notification.warning('Chức năng thêm hình ảnh đang phát triển');
+      return;
+    }
+
     try {
       setSaving(true);
 
@@ -262,7 +268,7 @@ export default function PersonalInfoScreen() {
         }
       }
 
-      // Update Trainer Data if PT
+      // Update Trainer Data if PT (without image upload)
       if (userDetail.role === 'pt' && trainerDetail) {
         const formData = new FormData();
 
@@ -273,7 +279,7 @@ export default function PersonalInfoScreen() {
         formData.append('education', education.trim());
         formData.append('specialization', specialization);
 
-        // Handle physiqueImages - separate old URLs from new files
+        // Only keep old images (don't upload new ones)
         const oldImages = physiqueImages.filter(
           (img) => !img.startsWith('blob:') && !img.startsWith('file:')
         );
@@ -285,27 +291,10 @@ export default function PersonalInfoScreen() {
           });
         }
 
-        // Append new image files with proper React Native format
-        // Backend expects files with key 'physiqueImagesNew'
-        if (newPhysiqueImages.length > 0) {
-          newPhysiqueImages.forEach((file, index) => {
-            const fileExtension = file.name?.split('.').pop() || 'jpg';
-            const fileName = file.name || `physique_${Date.now()}_${index}.${fileExtension}`;
-
-            // IMPORTANT: Keep file:// prefix - React Native needs it to read file binary
-            formData.append('physiqueImagesNew', {
-              uri: file.uri, // Keep original URI with file:// prefix
-              name: fileName,
-              type: file.type || 'image/jpeg',
-            } as any);
-          });
-        }
-
         console.log('🚀 ~ handleSave ~ Trainer update data:');
         console.log('  - pricePerHour:', pricePerHour);
         console.log('  - specialization:', specialization);
         console.log('  - Old images to keep:', oldImages.length);
-        console.log('  - New images to upload:', newPhysiqueImages.length);
 
         try {
           const trainerResponse = await trainerService.updateTrainerInfo(
@@ -365,29 +354,25 @@ export default function PersonalInfoScreen() {
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true,
+        mediaTypes: ['images'],
+        allowsEditing: false,
         quality: 0.8,
-        selectionLimit: maxNewImages,
       });
 
-      if (!result.canceled && result.assets) {
-        const newImages = result.assets.slice(0, maxNewImages);
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const asset = result.assets[0];
 
-        // Create blob URLs for preview
-        const blobUrls = newImages.map((asset) => asset.uri);
+        // Add to preview
+        setPhysiqueImages((prev) => [...prev, asset.uri]);
 
-        // Update physiqueImages with blob URLs
-        setPhysiqueImages((prev) => [...prev, ...blobUrls]);
-
-        // Store actual files
+        // Store actual file
         setNewPhysiqueImages((prev) => [
           ...prev,
-          ...newImages.map((asset) => ({
+          {
             uri: asset.uri,
             name: asset.fileName || `physique_${Date.now()}.jpg`,
             type: asset.type || 'image/jpeg',
-          })),
+          },
         ]);
       }
     } catch (error) {
@@ -740,6 +725,14 @@ export default function PersonalInfoScreen() {
                   Hình ảnh thân hình (Tối đa 6 ảnh)
                 </Text>
 
+                {/* Development Notice */}
+                <View className="mb-3 flex-row items-start rounded-lg bg-yellow-50 p-3 dark:bg-yellow-900/20">
+                  <Ionicons name="information-circle" size={20} color="#F59E0B" />
+                  <Text className="ml-2 flex-1 text-sm text-yellow-700 dark:text-yellow-400">
+                    Chức năng thêm hình ảnh đang phát triển
+                  </Text>
+                </View>
+
                 <View className="flex-row flex-wrap gap-2">
                   {physiqueImages.map((imageUri, index) => (
                     <View key={index} className="relative">
@@ -776,7 +769,7 @@ export default function PersonalInfoScreen() {
                   )}
                 </View>
                 <Text className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                  Thêm ảnh thể hình để thu hút học viên
+                  Hình ảnh thể hình giúp thu hút học viên
                 </Text>
               </View>
             </>

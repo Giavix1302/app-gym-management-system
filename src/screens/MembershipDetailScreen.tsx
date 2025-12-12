@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
@@ -11,6 +11,7 @@ import { getMyMembership, getUser, getTrainer, removeMyMembership } from '../uti
 import { membershipService } from '../services/membershipService';
 import { useNotification } from '../context/NotificationContext';
 import PaymentMethodModal from '../components/PaymentMethodModal';
+import ConfirmModal from '../components/modals/ConfirmModal';
 
 type MembershipDetailRouteProp = RouteProp<RootStackParamList, 'MembershipDetail'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -22,7 +23,10 @@ export default function MembershipDetailScreen() {
   const { success: showSuccess, error: showError } = useNotification();
 
   const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [showChangeConfirmModal, setShowChangeConfirmModal] = useState(false);
+  const [showCancelConfirmModal, setShowCancelConfirmModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const data = isMyMembership ? membership : pkg;
 
@@ -36,36 +40,9 @@ export default function MembershipDetailScreen() {
       const hasActiveMembership = currentMembership && currentMembership.name && currentMembership.name !== '';
 
       if (hasActiveMembership) {
-        // Người dùng đã có gói tập, hiện confirm xóa
-        Alert.alert(
-          'Xác nhận đổi gói tập',
-          'Bạn đang có gói tập hiện tại. Bạn có muốn hủy gói hiện tại và đăng ký gói mới?',
-          [
-            { text: 'Không', style: 'cancel', onPress: () => setLoading(false) },
-            {
-              text: 'Đồng ý',
-              style: 'destructive',
-              onPress: async () => {
-                try {
-                  // Xóa gói tập hiện tại
-                  console.log("🚀 ~ handleRegister ~ currentMembership._id:", currentMembership._id)
-                  await membershipService.deleteSubscription(currentMembership._id);
-
-                  // Xóa myMembership khỏi AsyncStorage
-                  await removeMyMembership();
-
-                  // Hiện modal chọn phương thức thanh toán
-                  setShowPaymentModal(true);
-                  setLoading(false);
-                } catch (error) {
-                  console.error('Error deleting subscription:', error);
-                  showError('Không thể hủy gói tập hiện tại. Vui lòng thử lại.');
-                  setLoading(false);
-                }
-              },
-            },
-          ]
-        );
+        // Người dùng đã có gói tập, hiện confirm modal
+        setLoading(false);
+        setShowChangeConfirmModal(true);
       } else {
         // Người dùng chưa có gói tập, hiện modal thanh toán luôn
         setShowPaymentModal(true);
@@ -75,6 +52,29 @@ export default function MembershipDetailScreen() {
       console.error('Error checking membership:', error);
       showError('Có lỗi xảy ra. Vui lòng thử lại.');
       setLoading(false);
+    }
+  };
+
+  const handleConfirmChange = async () => {
+    try {
+      setConfirmLoading(true);
+      const currentMembership = await getMyMembership();
+
+      // Xóa gói tập hiện tại
+      console.log("🚀 ~ handleConfirmChange ~ currentMembership._id:", currentMembership._id)
+      await membershipService.deleteSubscription(currentMembership._id);
+
+      // Xóa myMembership khỏi AsyncStorage
+      await removeMyMembership();
+
+      // Đóng confirm modal và hiện modal chọn phương thức thanh toán
+      setShowChangeConfirmModal(false);
+      setConfirmLoading(false);
+      setShowPaymentModal(true);
+    } catch (error) {
+      console.error('Error deleting subscription:', error);
+      showError('Không thể hủy gói tập hiện tại. Vui lòng thử lại.');
+      setConfirmLoading(false);
     }
   };
 
@@ -118,50 +118,42 @@ export default function MembershipDetailScreen() {
   };
 
   const handleCancel = () => {
-    Alert.alert(
-      'Hủy gói tập',
-      'Bạn có chắc chắn muốn hủy gói tập hiện tại?',
-      [
-        { text: 'Không', style: 'cancel' },
-        {
-          text: 'Hủy gói',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              setLoading(true);
-              const membership = await getMyMembership();
-              console.log("🚀 ~ handleCancel ~ membership:", membership)
-              // Gọi API xóa subscription
-              console.log("🚀 ~ handleCancel ~ membership._id:", membership._id)
-              const response = await membershipService.deleteSubscription(membership._id);
+    setShowCancelConfirmModal(true);
+  };
 
-              if (response.success) {
-                // Xóa myMembership trong AsyncStorage
-                await removeMyMembership();
+  const handleConfirmCancel = async () => {
+    try {
+      setConfirmLoading(true);
+      const membership = await getMyMembership();
+      console.log("🚀 ~ handleConfirmCancel ~ membership:", membership)
+      // Gọi API xóa subscription
+      console.log("🚀 ~ handleConfirmCancel ~ membership._id:", membership._id)
+      const response = await membershipService.deleteSubscription(membership._id);
 
-                showSuccess('Hủy gói tập thành công!');
+      if (response.success) {
+        // Xóa myMembership trong AsyncStorage
+        await removeMyMembership();
 
-                // Navigate về MembershipTab
-                setTimeout(() => {
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'UserTabs' }], // hoặc PTTabs
-                  });
-                }, 1000);
-              } else {
-                showError('Không thể hủy gói tập. Vui lòng thử lại.');
-              }
+        setShowCancelConfirmModal(false);
+        setConfirmLoading(false);
+        showSuccess('Hủy gói tập thành công!');
 
-              setLoading(false);
-            } catch (error) {
-              console.error('Error canceling membership:', error);
-              showError('Có lỗi xảy ra khi hủy gói tập. Vui lòng thử lại.');
-              setLoading(false);
-            }
-          },
-        },
-      ]
-    );
+        // Navigate về MembershipTab
+        setTimeout(() => {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'UserTabs' }], // hoặc PTTabs
+          });
+        }, 1000);
+      } else {
+        showError('Không thể hủy gói tập. Vui lòng thử lại.');
+        setConfirmLoading(false);
+      }
+    } catch (error) {
+      console.error('Error canceling membership:', error);
+      showError('Có lỗi xảy ra khi hủy gói tập. Vui lòng thử lại.');
+      setConfirmLoading(false);
+    }
   };
 
   const discountedPrice = pkg ? pkg.price - (pkg.price * pkg.discount / 100) : 0;
@@ -368,6 +360,32 @@ export default function MembershipDetailScreen() {
         visible={showPaymentModal}
         onClose={() => setShowPaymentModal(false)}
         onSelectVNPay={handleSelectVNPay}
+      />
+
+      {/* Confirm Change Membership Modal */}
+      <ConfirmModal
+        visible={showChangeConfirmModal}
+        title="Xác nhận đổi gói tập"
+        message="Bạn đang có gói tập hiện tại. Bạn có muốn hủy gói hiện tại và đăng ký gói mới?"
+        confirmText="Đồng ý"
+        cancelText="Không"
+        confirmStyle="primary"
+        onConfirm={handleConfirmChange}
+        onCancel={() => setShowChangeConfirmModal(false)}
+        loading={confirmLoading}
+      />
+
+      {/* Confirm Cancel Membership Modal */}
+      <ConfirmModal
+        visible={showCancelConfirmModal}
+        title="Hủy gói tập"
+        message="Bạn có chắc chắn muốn hủy gói tập hiện tại?"
+        confirmText="Hủy gói"
+        cancelText="Không"
+        confirmStyle="danger"
+        onConfirm={handleConfirmCancel}
+        onCancel={() => setShowCancelConfirmModal(false)}
+        loading={confirmLoading}
       />
     </SafeAreaView>
   );

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, Image, ScrollView, Alert } from 'react-native';
+import { View, Text, Image, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -9,12 +9,15 @@ import { User } from '../../../types/api';
 import { getAvatarSource, getInitials } from '../../../utils/avatar';
 import ProfileMenuItem from '../../../components/ProfileMenuItem';
 import { authService } from '../../../services/authService';
+import ConfirmModal from '../../../components/modals/ConfirmModal';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function ProfileScreen() {
   const navigation = useNavigation<NavigationProp>();
   const [user, setUser] = useState<User | null>(null);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
   const loadUser = useCallback(async () => {
     const userData = await getUser();
@@ -43,23 +46,23 @@ export default function ProfileScreen() {
   );
 
   const handleLogout = () => {
-    Alert.alert('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất?', [
-      {
-        text: 'Hủy',
-        style: 'cancel',
-      },
-      {
-        text: 'Đăng xuất',
-        style: 'destructive',
-        onPress: async () => {
-          await authService.logout();
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'Login' }],
-          });
-        },
-      },
-    ]);
+    setShowLogoutModal(true);
+  };
+
+  const handleConfirmLogout = async () => {
+    try {
+      setLogoutLoading(true);
+      await authService.logout();
+      setShowLogoutModal(false);
+      setLogoutLoading(false);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
+    } catch (error) {
+      console.error('Error logging out:', error);
+      setLogoutLoading(false);
+    }
   };
 
   const avatarSource = getAvatarSource(user?.avatar);
@@ -150,6 +153,19 @@ export default function ProfileScreen() {
           <Text className="text-sm text-gray-400">Phiên bản 1.0.0</Text>
         </View>
       </ScrollView>
+
+      {/* Confirm Logout Modal */}
+      <ConfirmModal
+        visible={showLogoutModal}
+        title="Đăng xuất"
+        message="Bạn có chắc chắn muốn đăng xuất?"
+        confirmText="Đăng xuất"
+        cancelText="Hủy"
+        confirmStyle="danger"
+        onConfirm={handleConfirmLogout}
+        onCancel={() => setShowLogoutModal(false)}
+        loading={logoutLoading}
+      />
     </SafeAreaView>
   );
 }
