@@ -18,6 +18,7 @@ import { getAvatarSource, getInitials, getLastName } from '../../../utils/avatar
 import NotificationBadge from '../../../components/NotificationBadge';
 import { useUnreadNotifications } from '../../../hooks/useUnreadNotifications';
 import { Ionicons } from '@expo/vector-icons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 import { eventService } from '../../../services/eventService';
 import { ScheduleEvent } from '../../../types/api';
@@ -130,8 +131,15 @@ export default function UserHomeTabScreen() {
             <Text className="text-xl font-semibold text-textPrimary">Xin chào {userLastName}</Text>
           </View>
 
-          {/* Right: Notification Icon with Badge */}
-          <NotificationBadge count={unreadCount} onPress={handleNotificationPress} />
+          {/* Right: Chatbot Icon + Notification Icon with Badge */}
+          <View className="flex-row items-center gap-3">
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Chatbot')}
+              className="rounded-full bg-primary/10 p-2">
+              <FontAwesome5 name="robot" size={20} color="#16697A" />
+            </TouchableOpacity>
+            <NotificationBadge count={unreadCount} onPress={handleNotificationPress} />
+          </View>
         </View>
       </View>
 
@@ -238,13 +246,32 @@ export default function UserHomeTabScreen() {
                 shadowRadius: 8,
                 elevation: 3,
               }}>
-              <View className="flex-row items-center justify-center gap-2">
-                <View className="h-14 w-14 items-center justify-center rounded-2xl bg-teal-50">
+              <View className="items-center">
+                <View className="mb-3 h-14 w-14 items-center justify-center rounded-2xl bg-teal-50">
                   <Ionicons name="qr-code-outline" size={28} color="#14b8a6" />
                 </View>
                 <Text className="text-center text-sm font-semibold text-gray-800">
                   Mã QR của tôi
                 </Text>
+              </View>
+            </TouchableOpacity>
+
+            {/* Tin nhắn Button */}
+            <TouchableOpacity
+              onPress={() => navigation.navigate('UserMessages')}
+              className="flex-1 rounded-2xl bg-white p-5 shadow-sm"
+              style={{
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.08,
+                shadowRadius: 8,
+                elevation: 3,
+              }}>
+              <View className="items-center">
+                <View className="mb-3 h-14 w-14 items-center justify-center rounded-2xl bg-pink-50">
+                  <Ionicons name="chatbubble-outline" size={28} color="#ec4899" />
+                </View>
+                <Text className="text-center text-sm font-semibold text-gray-800">Tin nhắn</Text>
               </View>
             </TouchableOpacity>
           </View>

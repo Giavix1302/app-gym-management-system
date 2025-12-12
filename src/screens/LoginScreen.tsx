@@ -14,10 +14,7 @@ import { useNotification } from '../context/NotificationContext';
 import { authService } from '../services/authService';
 import PrimaryButton from '../components/PrimaryButton';
 
-type LoginScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'Login'
->;
+type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 interface LoginScreenProps {
   navigation: LoginScreenNavigationProp;
@@ -104,32 +101,22 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1 bg-backgroundDefault"
-    >
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
-      >
+      className="flex-1 bg-backgroundDefault">
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
         <View className="flex-1 justify-center px-6">
           {/* Logo & Title */}
-          <View className="items-center mb-12">
-            <Text className="text-4xl font-bold text-primary mb-2">
-              THE GYM
-            </Text>
-            <Text className="text-lg text-textSecondary">
-              Chào mừng bạn trở lại
-            </Text>
+          <View className="mb-12 items-center">
+            <Text className="mb-2 text-4xl font-bold text-primary">THE GYM</Text>
+            <Text className="text-lg text-textSecondary">Chào mừng bạn trở lại</Text>
           </View>
 
           {/* Form */}
           <View className="mb-6">
             {/* Phone Input */}
             <View className="mb-4">
-              <Text className="text-sm font-semibold text-textPrimary mb-2">
-                Số điện thoại
-              </Text>
+              <Text className="mb-2 text-sm font-semibold text-textPrimary">Số điện thoại</Text>
               <TextInput
-                className="bg-white border border-gray-300 rounded-lg px-4 py-3 text-base text-textPrimary"
+                className="rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-textPrimary"
                 placeholder="Nhập số điện thoại"
                 placeholderTextColor="#9CA3AF"
                 value={phone}
@@ -142,11 +129,9 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
 
             {/* Password Input */}
             <View className="mb-4">
-              <Text className="text-sm font-semibold text-textPrimary mb-2">
-                Mật khẩu
-              </Text>
+              <Text className="mb-2 text-sm font-semibold text-textPrimary">Mật khẩu</Text>
               <TextInput
-                className="bg-white border border-gray-300 rounded-lg px-4 py-3 text-base text-textPrimary"
+                className="rounded-lg border border-gray-300 bg-white px-4 py-3 text-base text-textPrimary"
                 placeholder="Nhập mật khẩu"
                 placeholderTextColor="#9CA3AF"
                 value={password}
@@ -160,11 +145,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
             <TouchableOpacity
               onPress={handleForgotPassword}
               disabled={loading}
-              className="self-end mb-6"
-            >
-              <Text className="text-primary font-semibold text-sm">
-                Quên mật khẩu?
-              </Text>
+              className="mb-6 self-end">
+              <Text className="text-sm font-semibold text-primary">Quên mật khẩu?</Text>
             </TouchableOpacity>
 
             {/* Login Button */}
@@ -176,14 +158,10 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           </View>
 
           {/* Signup Link */}
-          <View className="flex-row justify-center items-center mb-4">
-            <Text className="text-textSecondary text-sm">
-              Chưa có tài khoản?{' '}
-            </Text>
+          <View className="mb-4 flex-row items-center justify-center">
+            <Text className="text-sm text-textSecondary">Chưa có tài khoản? </Text>
             <TouchableOpacity onPress={handleSignup} disabled={loading}>
-              <Text className="text-primary font-semibold text-sm">
-                Đăng ký ngay
-              </Text>
+              <Text className="text-sm font-semibold text-primary">Đăng ký ngay</Text>
             </TouchableOpacity>
           </View>
 
@@ -191,9 +169,8 @@ export default function LoginScreen({ navigation }: LoginScreenProps) {
           <TouchableOpacity
             onPress={() => navigation.navigate('LocationsTest')}
             disabled={loading}
-            className="py-3 px-6 bg-gray-200 rounded-lg"
-          >
-            <Text className="text-center text-textPrimary font-semibold">
+            className="rounded-lg bg-gray-200 px-6 py-3">
+            <Text className="text-center font-semibold text-textPrimary">
               🧪 Test Locations API
             </Text>
           </TouchableOpacity>

@@ -1,3 +1,4 @@
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'react-native';
@@ -47,42 +48,48 @@ import BookingDetailScreen from '../screens/booking/BookingDetailScreen';
 // Class Screens
 import ClassDetailScreen from '../screens/class/ClassDetailScreen';
 
+// PT Schedule Screens
+import PTBookingDetailScreen from '../screens/tabs/pt/PTBookingDetailScreen';
+import CreateScheduleScreen from '../screens/tabs/pt/CreateScheduleScreen';
+import DailyScheduleScreen from '../screens/tabs/pt/DailyScheduleScreen';
+
+// PT Class Management Screens
+import PTClassDetailScreen from '../screens/tabs/pt/PTClassDetailScreen';
+import DailyClassSessionScreen from '../screens/tabs/pt/DailyClassSessionScreen';
+
+// PT My Schedule Screen
+import PTMyScheduleScreen from '../screens/tabs/pt/PTMyScheduleScreen';
+
+// Chatbot Screen
+import ChatbotScreen from '../screens/ChatbotScreen';
+
+// Messaging Screens
+import UserMessagesScreen from '../screens/messaging/UserMessagesScreen';
+import UserChatScreen from '../screens/messaging/UserChatScreen';
+import PTMessagesScreen from '../screens/messaging/PTMessagesScreen';
+import PTChatScreen from '../screens/messaging/PTChatScreen';
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor={Colors.primary}
-        translucent={false}
-      />
+      <StatusBar barStyle="light-content" backgroundColor={Colors.primary} translucent={false} />
       <Stack.Navigator
         initialRouteName="Login"
-
         screenOptions={{
           headerStyle: {
             backgroundColor: Colors.primary,
-          
           },
           headerTintColor: Colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
           },
           headerShown: false,
-        }}
-      >
+        }}>
         {/* Auth Screens - No Header */}
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Signup"
-          component={SignupScreen}
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
         <Stack.Screen
           name="ForgotPassword"
           component={ForgotPasswordScreen}
@@ -169,11 +176,7 @@ export default function AppNavigator() {
           component={PaymentHistoryScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Revenue"
-          component={RevenueScreen}
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="Revenue" component={RevenueScreen} options={{ headerShown: false }} />
         <Stack.Screen
           name="ChangePassword"
           component={ChangePasswordScreen}
@@ -211,6 +214,13 @@ export default function AppNavigator() {
           options={{ headerShown: false }}
         />
 
+        {/* PT My Schedule Screen */}
+        <Stack.Screen
+          name="PTMySchedule"
+          component={PTMyScheduleScreen}
+          options={{ headerShown: false }}
+        />
+
         {/* Booking PT Screens */}
         <Stack.Screen
           name="TrainerDetail"
@@ -229,8 +239,47 @@ export default function AppNavigator() {
           component={ClassDetailScreen}
           options={{ headerShown: false }}
         />
+
+        {/* PT Schedule Screens */}
+        <Stack.Screen
+          name="PTBookingDetail"
+          component={PTBookingDetailScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="CreateSchedule"
+          component={CreateScheduleScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DailySchedule"
+          component={DailyScheduleScreen}
+          options={{ headerShown: false }}
+        />
+
+        {/* PT Class Management Screens */}
+        <Stack.Screen
+          name="PTClassDetail"
+          component={PTClassDetailScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DailyClassSession"
+          component={DailyClassSessionScreen}
+          options={{ headerShown: false }}
+        />
+
+        {/* Chatbot Screen */}
+        <Stack.Screen name="Chatbot" component={ChatbotScreen} options={{ headerShown: false }} />
+
+        {/* Messaging Screens - User */}
+        <Stack.Screen name="UserMessages" component={UserMessagesScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="UserChat" component={UserChatScreen} options={{ headerShown: false }} />
+
+        {/* Messaging Screens - PT */}
+        <Stack.Screen name="PTMessages" component={PTMessagesScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="PTChat" component={PTChatScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
-
   );
 }

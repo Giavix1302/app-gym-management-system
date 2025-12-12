@@ -9,6 +9,7 @@ import { GroupedBooking, BookingSession, HistoryBooking } from '../../types/book
 import { bookingService } from '../../services/bookingService';
 import { reviewService } from '../../services/reviewService';
 import { calculateCancelInfo, formatSlotTime, formatPrice } from '../../utils/bookingHelpers';
+import { formatFullDate, convertUTCToVietnam } from '../../utils/dateTime';
 import { useNotification } from '../../context/NotificationContext';
 import { getUser } from '../../utils/storage';
 import ConfirmModal from '../../components/modals/ConfirmModal';
@@ -275,6 +276,14 @@ export default function BookingDetailScreen() {
               <View
                 key={isUpcoming ? upcomingSession.bookingId : historySession._id}
                 className="mb-3 rounded-2xl border border-gray-200 bg-white p-4">
+                {/* Date */}
+                <View className="mb-2 flex-row items-center">
+                  <Ionicons name="calendar" size={16} color="#16697A" />
+                  <Text className="ml-2 text-base font-semibold text-gray-800">
+                    {formatFullDate(convertUTCToVietnam(startTime))}
+                  </Text>
+                </View>
+
                 {/* Time */}
                 <View className="mb-2 flex-row items-center">
                   <Ionicons name="time" size={16} color="#16697A" />

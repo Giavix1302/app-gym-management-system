@@ -55,24 +55,32 @@ export interface User {
 // ==================== Trainer Types ====================
 export interface Trainer {
   _id: string;
-  fullName: string;
-  phone: string;
-  email: string;
-  password: string;
-  role: 'pt';
-  isActived: boolean;
-  gender: string;
-  address: string;
-  avatar: string;
-  height: number;
-  weight: number;
-  achievements: string;
-  experience: number;
-  certification: string;
-  specialty: string;
+  pricePerHour: number;
+  bio: string;
+  experience: string; // Changed from number to string
+  education: string;
+  specialization: string;
+  userId: string;
+  physiqueImages: string[];
+  isApproved: 'pending' | 'approved' | 'rejected';
+  approvedAt?: string;
+  // Legacy fields (may still be used)
+  fullName?: string;
+  phone?: string;
+  email?: string;
+  password?: string;
+  role?: 'pt';
+  isActived?: boolean;
+  gender?: string;
+  address?: string;
+  avatar?: string;
+  height?: number;
+  weight?: number;
+  achievements?: string;
+  certification?: string;
   myMembership?: Membership;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // ==================== Login Types ====================
@@ -226,4 +234,70 @@ export interface EventQueryParams {
   week?: number;
   year?: number;
   month?: number;
+}
+
+// ==================== PT Event Types (Trainer Events) ====================
+export type PTEventType = 'booking' | 'class';
+export type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
+
+export interface PTBookingEvent {
+  _id?: string;
+  title: string;
+  startTime: string; // ISO 8601 UTC
+  endTime: string;
+  locationName: string;
+  userName: string; // Client name who booked
+  note?: string;
+  price: number;
+  status: BookingStatus;
+  eventType: 'booking';
+}
+
+export interface PTClassEvent {
+  _id?: string;
+  title: string;
+  startTime: string; // ISO 8601 UTC
+  endTime: string;
+  locationName: string;
+  roomName: string;
+  sessionNumber: number;
+  totalSessions: number;
+  enrolledCount: number;
+  capacity: number;
+  eventType: 'class';
+}
+
+export type PTEvent = PTBookingEvent | PTClassEvent;
+
+export interface PTEventsResponse {
+  success: boolean;
+  message: string;
+  events: PTEvent[];
+}
+
+// ==================== Revenue Types ====================
+export interface RevenueItem {
+  _id: string;
+  title: string;
+  price: number;
+  userName?: string; // For bookings
+  roomName?: string; // For class sessions
+  locationName: string;
+  createAt: number;
+}
+
+export interface RevenuePagination {
+  currentPage: number;
+  totalPages: number;
+  totalPayments: number;
+  limit: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface RevenueResponse {
+  success: boolean;
+  message: string;
+  data: RevenueItem[];
+  pagination: RevenuePagination;
 }

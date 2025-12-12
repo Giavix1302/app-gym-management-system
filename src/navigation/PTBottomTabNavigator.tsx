@@ -29,23 +29,18 @@ export default function PTBottomTabNavigator() {
           paddingTop: 8,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
+          fontSize: 10,
           fontWeight: '600',
         },
         headerShown: false,
-      }}
-    >
+      }}>
       <Tab.Screen
         name="PTHomeTab"
         component={PTHomeTabScreen}
         options={{
           tabBarLabel: 'Trang chủ',
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'home' : 'home-outline'}
-              size={size}
-              color={color}
-            />
+            <Ionicons name={focused ? 'home' : 'home-outline'} size={size} color={color} />
           ),
         }}
       />
@@ -55,11 +50,7 @@ export default function PTBottomTabNavigator() {
         options={{
           tabBarLabel: 'Lịch dạy',
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'calendar' : 'calendar-outline'}
-              size={size}
-              color={color}
-            />
+            <Ionicons name={focused ? 'calendar' : 'calendar-outline'} size={size} color={color} />
           ),
         }}
       />
@@ -69,11 +60,7 @@ export default function PTBottomTabNavigator() {
         options={{
           tabBarLabel: 'Lớp học',
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'school' : 'school-outline'}
-              size={size}
-              color={color}
-            />
+            <Ionicons name={focused ? 'school' : 'school-outline'} size={size} color={color} />
           ),
         }}
       />
@@ -83,11 +70,7 @@ export default function PTBottomTabNavigator() {
         options={{
           tabBarLabel: 'Gói tập',
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'barbell' : 'barbell-outline'}
-              size={size}
-              color={color}
-            />
+            <Ionicons name={focused ? 'barbell' : 'barbell-outline'} size={size} color={color} />
           ),
         }}
       />
@@ -97,11 +80,7 @@ export default function PTBottomTabNavigator() {
         options={{
           tabBarLabel: 'Hồ sơ',
           tabBarIcon: ({ color, size, focused }) => (
-            <Ionicons
-              name={focused ? 'person' : 'person-outline'}
-              size={size}
-              color={color}
-            />
+            <Ionicons name={focused ? 'person' : 'person-outline'} size={size} color={color} />
           ),
         }}
       />

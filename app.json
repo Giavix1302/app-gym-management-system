@@ -29,7 +29,8 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.giavix1302.gymapp"
+      "package": "com.giavix1302.gymapp",
+      "softwareKeyboardLayoutMode": "resize"
     },
     "extra": {
       "eas": {

@@ -30,6 +30,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Settings: undefined;
   MySchedule: undefined;
+  PTMySchedule: undefined;
   // Profile related screens
   PersonalInfo: undefined;
   FitnessProgress: undefined;
@@ -68,5 +69,45 @@ export type RootStackParamList = {
   // Class enrollment screens
   ClassDetail: {
     classId: string;
+  };
+  // PT Schedule screens
+  PTBookingDetail: {
+    schedule: any; // PTSchedule type
+  };
+  CreateSchedule: {
+    trainerId: string;
+  };
+  DailySchedule: {
+    selectedDate: string; // ISO date string
+  };
+  // PT Class Management screens
+  PTClassDetail: {
+    classData: any; // PTClass type
+  };
+  DailyClassSession: {
+    selectedDate: string; // ISO date string
+    sessions: any[]; // ClassSessionEvent[] type
+  };
+  // Chatbot Screen
+  Chatbot: undefined;
+  // Messaging screens - User role
+  UserMessages: undefined;
+  UserChat: {
+    conversationId: string;
+    trainer: {
+      _id: string;
+      fullName: string;
+      avatar?: string;
+    };
+  };
+  // Messaging screens - PT role
+  PTMessages: undefined;
+  PTChat: {
+    conversationId: string;
+    student: {
+      _id: string;
+      fullName: string;
+      avatar?: string;
+    };
   };
 };

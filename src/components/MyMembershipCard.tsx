@@ -19,13 +19,9 @@ export default function MyMembershipCard({ membership, onPress }: MyMembershipCa
     <>
       {/* Banner Image */}
       {membership.bannerURL ? (
-        <Image
-          source={{ uri: membership.bannerURL }}
-          className="w-full h-40"
-          resizeMode="cover"
-        />
+        <Image source={{ uri: membership.bannerURL }} className="h-40 w-full" resizeMode="cover" />
       ) : (
-        <View className="w-full h-40 bg-primary justify-center items-center">
+        <View className="h-40 w-full items-center justify-center bg-primary">
           <Ionicons name="barbell" size={60} color="#FFFFFF" />
         </View>
       )}
@@ -33,30 +29,21 @@ export default function MyMembershipCard({ membership, onPress }: MyMembershipCa
       {/* Content */}
       <View className="p-4">
         {/* Badge Status */}
-        <View className="flex-row items-center justify-between mb-3">
-          <View
-            className={`px-3 py-1 rounded-full ${
-              isActive ? 'bg-green-100' : 'bg-gray-100'
-            }`}
-          >
+        <View className="mb-3 flex-row items-center justify-between">
+          <View className={`rounded-full px-3 py-1 ${isActive ? 'bg-green-100' : 'bg-gray-100'}`}>
             <Text
-              className={`text-xs font-semibold ${
-                isActive ? 'text-green-600' : 'text-gray-600'
-              }`}
-            >
+              className={`text-xs font-semibold ${isActive ? 'text-green-600' : 'text-gray-600'}`}>
               {isActive ? 'Đang hoạt động' : membership.status || 'Không hoạt động'}
             </Text>
           </View>
           <View className="flex-row items-center">
             <Ionicons name="time-outline" size={16} color="#6B7280" />
-            <Text className="text-sm text-gray-600 ml-1">
-              {membership.durationMonth} tháng
-            </Text>
+            <Text className="ml-1 text-sm text-gray-600">{membership.durationMonth} tháng</Text>
           </View>
         </View>
 
         {/* Package Name */}
-        <Text className="text-xl font-bold text-gray-800 mb-2">
+        <Text className="mb-2 text-xl font-bold text-gray-800">
           {membership.name || 'Gói tập của tôi'}
         </Text>
 
@@ -64,23 +51,25 @@ export default function MyMembershipCard({ membership, onPress }: MyMembershipCa
         <View className="space-y-2">
           <View className="flex-row items-center">
             <Ionicons name="calendar-outline" size={18} color="#16697A" />
-            <Text className="text-sm text-gray-600 ml-2">
+            <Text className="ml-2 text-sm text-gray-600">
               Hết hạn: <Text className="font-semibold text-gray-800">{formattedEndDate}</Text>
             </Text>
           </View>
 
           <View className="flex-row items-center">
             <Ionicons name="checkmark-circle-outline" size={18} color="#16697A" />
-            <Text className="text-sm text-gray-600 ml-2">
-              Số lần checkin: <Text className="font-semibold text-gray-800">{membership.totalCheckin || 0}</Text>
+            <Text className="ml-2 text-sm text-gray-600">
+              Số lần checkin:{' '}
+              <Text className="font-semibold text-gray-800">{membership.totalCheckin || 0}</Text>
             </Text>
           </View>
 
           {membership.remainingSessions > 0 && (
             <View className="flex-row items-center">
               <Ionicons name="fitness-outline" size={18} color="#16697A" />
-              <Text className="text-sm text-gray-600 ml-2">
-                Buổi tập còn lại: <Text className="font-semibold text-gray-800">{membership.remainingSessions}</Text>
+              <Text className="ml-2 text-sm text-gray-600">
+                Buổi tập còn lại:{' '}
+                <Text className="font-semibold text-gray-800">{membership.remainingSessions}</Text>
               </Text>
             </View>
           )}
@@ -92,18 +81,15 @@ export default function MyMembershipCard({ membership, onPress }: MyMembershipCa
   if (onPress) {
     return (
       <TouchableOpacity
-        className="bg-white rounded-2xl overflow-hidden shadow-sm mb-4 mx-4"
+        className="mx-4 mb-4 overflow-hidden rounded-2xl bg-white shadow-sm"
         onPress={onPress}
-        activeOpacity={0.7}
-      >
+        activeOpacity={0.7}>
         {cardContent}
       </TouchableOpacity>
     );
   }
 
   return (
-    <View className="bg-white rounded-2xl overflow-hidden shadow-sm mb-4 mx-4">
-      {cardContent}
-    </View>
+    <View className="mx-4 mb-4 overflow-hidden rounded-2xl bg-white shadow-sm">{cardContent}</View>
   );
 }

@@ -191,25 +191,26 @@ export default function ClassDetailScreen() {
   const scheduleText = formatRecurrenceSchedule(classData.recurrence);
   const durationText = formatClassDuration(classData.startDate, classData.endDate);
   const sortedSessions = sortClassSessions(classData.classSession);
-  const trainer = classData.trainers && classData.trainers.length > 0 ? classData.trainers[0] : null;
+  const trainer =
+    classData.trainers && classData.trainers.length > 0 ? classData.trainers[0] : null;
 
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Header */}
-      <View className="flex-row items-center justify-between px-4 py-3 bg-white border-b border-gray-200">
+      <View className="flex-row items-center justify-between border-b border-gray-200 bg-white px-4 py-3">
         <TouchableOpacity onPress={handleBackPress} className="p-1">
           <Ionicons name="arrow-back" size={24} color="#1F2937" />
         </TouchableOpacity>
-        <Text className="text-lg font-bold text-gray-800 flex-1 text-center">Chi tiết lớp học</Text>
+        <Text className="flex-1 text-center text-lg font-bold text-gray-800">Chi tiết lớp học</Text>
         <View className="w-10" />
       </View>
 
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Class Image */}
         {classData.image ? (
-          <Image source={{ uri: classData.image }} className="w-full h-56" resizeMode="cover" />
+          <Image source={{ uri: classData.image }} className="h-56 w-full" resizeMode="cover" />
         ) : (
-          <View className="w-full h-56 bg-primary/10 items-center justify-center">
+          <View className="h-56 w-full items-center justify-center bg-primary/10">
             <Ionicons name={classTypeIcon as any} size={80} color="#16697A" />
           </View>
         )}
@@ -217,59 +218,59 @@ export default function ClassDetailScreen() {
         {/* Class Info Section */}
         <View className="p-4">
           {/* Class Type Badge */}
-          <View className="flex-row items-center mb-2">
-            <View className="bg-primary/10 rounded-full px-3 py-1 flex-row items-center">
+          <View className="mb-2 flex-row items-center">
+            <View className="flex-row items-center rounded-full bg-primary/10 px-3 py-1">
               <Ionicons name={classTypeIcon as any} size={14} color="#16697A" />
-              <Text className="text-sm font-semibold text-primary ml-1">{classTypeLabel}</Text>
+              <Text className="ml-1 text-sm font-semibold text-primary">{classTypeLabel}</Text>
             </View>
             {isEnrolled && (
-              <View className="bg-success rounded-full px-3 py-1 ml-2">
+              <View className="ml-2 rounded-full bg-success px-3 py-1">
                 <Text className="text-sm font-bold text-white">Đã đăng ký</Text>
               </View>
             )}
           </View>
 
           {/* Class Name */}
-          <Text className="text-2xl font-bold text-gray-800 mb-2">{classData.name}</Text>
+          <Text className="mb-2 text-2xl font-bold text-gray-800">{classData.name}</Text>
 
           {/* Description */}
           {classData.description && (
-            <Text className="text-base text-gray-600 mb-4 leading-6">{classData.description}</Text>
+            <Text className="mb-4 text-base leading-6 text-gray-600">{classData.description}</Text>
           )}
 
           {/* Price */}
-          <View className="bg-primary/5 rounded-xl p-4 mb-4">
-            <Text className="text-sm text-gray-600 mb-1">Học phí</Text>
+          <View className="mb-4 rounded-xl bg-primary/5 p-4">
+            <Text className="mb-1 text-sm text-gray-600">Học phí</Text>
             <Text className="text-3xl font-bold text-primary">{formatPrice(classData.price)}</Text>
           </View>
 
           {/* Trainer Section */}
           {trainer && (
             <View className="mb-4">
-              <Text className="text-lg font-bold text-gray-800 mb-3">Huấn luyện viên</Text>
-              <View className="flex-row items-center p-3 bg-gray-50 rounded-xl">
+              <Text className="mb-3 text-lg font-bold text-gray-800">Huấn luyện viên</Text>
+              <View className="flex-row items-center rounded-xl bg-gray-50 p-3">
                 {trainer.avatar ? (
                   <Image
                     source={{ uri: trainer.avatar }}
-                    className="w-16 h-16 rounded-full mr-3"
+                    className="mr-3 h-16 w-16 rounded-full"
                     resizeMode="cover"
                   />
                 ) : (
-                  <View className="w-16 h-16 rounded-full bg-primary/10 items-center justify-center mr-3">
+                  <View className="mr-3 h-16 w-16 items-center justify-center rounded-full bg-primary/10">
                     <Ionicons name="person" size={32} color="#16697A" />
                   </View>
                 )}
                 <View className="flex-1">
-                  <Text className="text-base font-bold text-gray-800 mb-1">{trainer.name}</Text>
-                  <View className="flex-row items-center mb-1">
+                  <Text className="mb-1 text-base font-bold text-gray-800">{trainer.name}</Text>
+                  <View className="mb-1 flex-row items-center">
                     <Ionicons name="barbell" size={14} color="#6B7280" />
-                    <Text className="text-sm text-gray-600 ml-1 capitalize">
+                    <Text className="ml-1 text-sm capitalize text-gray-600">
                       {trainer.specialization}
                     </Text>
                   </View>
                   <View className="flex-row items-center">
                     <Ionicons name="star" size={14} color="#F59E0B" />
-                    <Text className="text-sm text-gray-600 ml-1">
+                    <Text className="ml-1 text-sm text-gray-600">
                       {trainer.rating > 0 ? trainer.rating.toFixed(1) : 'Chưa có đánh giá'}
                     </Text>
                   </View>
@@ -280,19 +281,19 @@ export default function ClassDetailScreen() {
 
           {/* Schedule Section */}
           <View className="mb-4">
-            <Text className="text-lg font-bold text-gray-800 mb-3">Lịch học</Text>
-            <View className="bg-gray-50 rounded-xl p-4">
-              <View className="flex-row items-start mb-3">
+            <Text className="mb-3 text-lg font-bold text-gray-800">Lịch học</Text>
+            <View className="rounded-xl bg-gray-50 p-4">
+              <View className="mb-3 flex-row items-start">
                 <Ionicons name="calendar" size={18} color="#16697A" />
                 <View className="ml-3 flex-1">
-                  <Text className="text-sm text-gray-600 mb-1">Thời gian khóa học</Text>
+                  <Text className="mb-1 text-sm text-gray-600">Thời gian khóa học</Text>
                   <Text className="text-base font-semibold text-gray-800">{durationText}</Text>
                 </View>
               </View>
               <View className="flex-row items-start">
                 <Ionicons name="time" size={18} color="#16697A" />
                 <View className="ml-3 flex-1">
-                  <Text className="text-sm text-gray-600 mb-1">Lịch học hàng tuần</Text>
+                  <Text className="mb-1 text-sm text-gray-600">Lịch học hàng tuần</Text>
                   <Text className="text-base font-semibold text-gray-800">{scheduleText}</Text>
                 </View>
               </View>
@@ -301,12 +302,14 @@ export default function ClassDetailScreen() {
 
           {/* Location Section */}
           <View className="mb-4">
-            <Text className="text-lg font-bold text-gray-800 mb-3">Địa điểm</Text>
-            <View className="bg-gray-50 rounded-xl p-4">
-              <Text className="text-base font-bold text-gray-800 mb-2">{classData.locationName}</Text>
+            <Text className="mb-3 text-lg font-bold text-gray-800">Địa điểm</Text>
+            <View className="rounded-xl bg-gray-50 p-4">
+              <Text className="mb-2 text-base font-bold text-gray-800">
+                {classData.locationName}
+              </Text>
               <View className="flex-row items-start">
                 <Ionicons name="location" size={18} color="#16697A" />
-                <Text className="text-sm text-gray-600 ml-2 flex-1">
+                <Text className="ml-2 flex-1 text-sm text-gray-600">
                   {classData.address.street}, {classData.address.ward}, {classData.address.province}
                 </Text>
               </View>
@@ -314,10 +317,10 @@ export default function ClassDetailScreen() {
           </View>
 
           {/* Capacity */}
-          <View className="mb-4 bg-gray-50 rounded-xl p-4 flex-row items-center justify-between">
+          <View className="mb-4 flex-row items-center justify-between rounded-xl bg-gray-50 p-4">
             <View className="flex-row items-center">
               <Ionicons name="people" size={20} color="#16697A" />
-              <Text className="text-base text-gray-700 ml-2">Sĩ số lớp</Text>
+              <Text className="ml-2 text-base text-gray-700">Sĩ số lớp</Text>
             </View>
             <Text className="text-lg font-bold text-primary">
               {classData.enrolled}/{classData.capacity} người
@@ -326,13 +329,14 @@ export default function ClassDetailScreen() {
 
           {/* Enrollment Info (if enrolled) */}
           {isEnrolled && (
-            <View className="mb-4 bg-success/5 border border-success/20 rounded-xl p-4">
-              <View className="flex-row items-center mb-2">
+            <View className="mb-4 rounded-xl border border-success/20 bg-success/5 p-4">
+              <View className="mb-2 flex-row items-center">
                 <Ionicons name="checkmark-circle" size={20} color="#10B981" />
-                <Text className="text-base font-bold text-success ml-2">Đã đăng ký lớp học</Text>
+                <Text className="ml-2 text-base font-bold text-success">Đã đăng ký lớp học</Text>
               </View>
               <Text className="text-sm text-gray-600">
-                Ngày đăng ký: {new Date((classData as EnrolledClass).enrolledAt).toLocaleDateString('vi-VN')}
+                Ngày đăng ký:{' '}
+                {new Date((classData as EnrolledClass).enrolledAt).toLocaleDateString('vi-VN')}
               </Text>
               <Text className="text-sm text-gray-600">
                 Trạng thái: <Text className="font-semibold text-success">Đã thanh toán</Text>
@@ -342,7 +346,7 @@ export default function ClassDetailScreen() {
 
           {/* Class Sessions Section */}
           <View className="mb-4">
-            <Text className="text-lg font-bold text-gray-800 mb-3">
+            <Text className="mb-3 text-lg font-bold text-gray-800">
               Các buổi học ({sortedSessions.length} buổi)
             </Text>
             <FlatList
@@ -356,25 +360,25 @@ export default function ClassDetailScreen() {
       </ScrollView>
 
       {/* Action Button */}
-      <View className="p-4 border-t border-gray-200 bg-white">
+      <View className="border-t border-gray-200 bg-white p-4">
         {paymentLoading ? (
-          <View className="bg-primary/50 py-4 rounded-xl items-center">
+          <View className="items-center rounded-xl bg-primary/50 py-4">
             <ActivityIndicator color="#FFFFFF" />
           </View>
         ) : isEnrolled ? (
           <TouchableOpacity
-            className="bg-red-500 py-4 rounded-xl items-center"
+            className="items-center rounded-xl bg-red-500 py-4"
             onPress={handleCancelPress}
             activeOpacity={0.8}>
-            <Text className="text-white text-base font-bold">Hủy đăng ký</Text>
+            <Text className="text-base font-bold text-white">Hủy đăng ký</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
-            className="bg-primary py-4 rounded-xl items-center"
+            className="items-center rounded-xl bg-primary py-4"
             onPress={handleEnrollPress}
             activeOpacity={0.8}
             disabled={classData.enrolled >= classData.capacity}>
-            <Text className="text-white text-base font-bold">
+            <Text className="text-base font-bold text-white">
               {classData.enrolled >= classData.capacity ? 'Lớp đã đầy' : 'Đăng ký ngay'}
             </Text>
           </TouchableOpacity>
